@@ -523,8 +523,6 @@ const GUESTS=[
   {id:9,nm:'James Wilson',i:'JW',col:'#fee2e2',tc:'#b91c1c',ph:'+1 555 123 4567',em:'james@email.com',nat:'USA',stays:1,total:440,lastStay:'Apr 8',tags:['First Time'],room:'303',pref:'',allergies:['🦞 Shellfish'],avoids:['Chilli']},
   {id:10,nm:'Walk-in Guest',i:'WI',col:'#f0ede6',tc:'#52504a',ph:'—',em:'',nat:'—',stays:0,total:0,lastStay:'—',tags:[],room:'',pref:'',allergies:[],avoids:[]},
 ];
-const MENU={All:[],
-  
 const MODS={
   coffee:[{lbl:'Milk',opts:['Full Milk','Oat Milk','15% Milk','No Milk']}],
   cocktail:[{lbl:'Ice',opts:['Full Ice','Less Ice','No Ice']}],
@@ -532,10 +530,11 @@ const MODS={
   mains:[{lbl:'Cooking',opts:['Rare','Med-Rare','Medium','Well Done']},{lbl:'Sauce',opts:['On Side','Extra Sauce','No Sauce']}],
   starters:[{lbl:'Spice',opts:['Mild','Medium','Spicy']}],
 };
-'Coffee':[{id:'c1',nm:'Espresso',p:18,e:'☕',b:'pop',src:'bar',available:99,modCat:'coffee'},{id:'c2',nm:'Cappuccino',p:22,e:'☕',src:'bar',available:99,modCat:'coffee'},{id:'c3',nm:'Flat White',p:24,e:'🥛',b:'pop',src:'bar',available:99,modCat:'coffee'},{id:'c4',nm:'Cold Brew',p:28,e:'🧊',b:'new',src:'bar',available:99,modCat:'coffee'},{id:'c5',nm:'Latte',p:26,e:'🍵',src:'bar',available:99,modCat:'coffee'}],
+const MENU={
+  'Coffee':[{id:'c1',nm:'Espresso',p:18,e:'☕',b:'pop',src:'bar',available:99,modCat:'coffee'},{id:'c2',nm:'Cappuccino',p:22,e:'☕',src:'bar',available:99,modCat:'coffee'},{id:'c3',nm:'Flat White',p:24,e:'🥛',b:'pop',src:'bar',available:99,modCat:'coffee'},{id:'c4',nm:'Cold Brew',p:28,e:'🧊',b:'new',src:'bar',available:99,modCat:'coffee'},{id:'c5',nm:'Latte',p:26,e:'🍵',src:'bar',available:99,modCat:'coffee'}],
   'Cocktails':[{id:'k1',nm:'Mojito',p:45,e:'🍹',b:'pop',src:'bar',available:99,modCat:'cocktail'},{id:'k2',nm:'Negroni',p:48,e:'🍸',src:'bar',available:99,modCat:'cocktail'},{id:'k3',nm:'Old Fashioned',p:52,e:'🥃',b:'pop',src:'bar',available:99,modCat:'cocktail'},{id:'k4',nm:'Martini',p:48,e:'🍸',src:'bar',available:99,modCat:'cocktail'},{id:'k5',nm:'Aperol Spritz',p:42,e:'🍊',b:'new',src:'bar',available:99,modCat:'cocktail'}],
   'Drinks':[{id:'d1',nm:'Fresh OJ',p:24,e:'🍊',src:'bar',available:99},{id:'d2',nm:'Smoothie',p:32,e:'🍓',b:'new',src:'bar',available:99},{id:'d3',nm:'Sparkling Water',p:14,e:'💧',src:'bar',available:99},{id:'d4',nm:'Lemonade',p:22,e:'🍋',src:'bar',available:99},{id:'d5',nm:'Soft Drink',p:16,e:'🥤',src:'bar',available:99}],
-  'Starters':[{id:'f1',nm:'Hummus & Bread',p:38,e:'🫓',src:'kitchen',available:8},{id:'f2',nm:'Bruschetta',p:32,e:'🍅',src:'kitchen',available:6},{id:'f3',nm:'Soup of Day',p:42,e:'🍲',b:'new',src:'kitchen',available:5},{id:'f4',nm:'Calamari',p:45,e:'🦑',src:'kitchen',available:7}],
+  'Starters':[{id:'f1',nm:'Hummus & Bread',p:38,e:'🫓',src:'kitchen',available:8,modCat:'starters'},{id:'f2',nm:'Bruschetta',p:32,e:'🍅',src:'kitchen',available:6,modCat:'starters'},{id:'f3',nm:'Soup of Day',p:42,e:'🍲',b:'new',src:'kitchen',available:5,modCat:'starters'},{id:'f4',nm:'Calamari',p:45,e:'🦑',src:'kitchen',available:7,modCat:'starters'}],
   'Mains':[{id:'m1',nm:'Grilled Salmon',p:95,e:'🐟',b:'pop',src:'kitchen',available:4,modCat:'mains'},{id:'m2',nm:'Wagyu Burger',p:88,e:'🍔',b:'pop',src:'kitchen',available:2,modCat:'mains'},{id:'m3',nm:'Pasta Carbonara',p:72,e:'🍝',src:'kitchen',available:0,eightySixed:true,modCat:'mains'},{id:'m4',nm:'Chicken Tagine',p:82,e:'🍗',src:'kitchen',available:6,modCat:'mains'},{id:'m5',nm:'Veggie Bowl',p:62,e:'🥗',b:'new',src:'kitchen',available:8,modCat:'mains'}],
   'Desserts':[{id:'s1',nm:'Cheesecake',p:42,e:'🍰',b:'pop',src:'kitchen',available:6},{id:'s2',nm:'Chocolate Fondant',p:46,e:'🍫',src:'kitchen',available:5},{id:'s3',nm:'Baklava',p:36,e:'🍯',b:'new',src:'kitchen',available:8}]
 };
@@ -583,12 +582,68 @@ const RESERVATIONS=[
 ];
 let tableOrders={},tableSeating={},orders_bar={};
 ['B1','B2','B3','Bar Tab 1','Bar Tab 2'].forEach(t=>orders_bar[t]=[]);
-let aT='T1',aC='All',vw='dash',selGuest=GUESTS[0];
+let aT='T2',aC='All',vw='dash',selGuest=GUESTS[0];
 let tableTimers={},tableWaiters={},currentWaiter='Ahmed';
 let pinCallback=null,pinValue='',activeDiscount=null,splitMode='full';
 const MANAGER_PIN='1234';
 let pendingCheckinRoom=null,mpOpenCourse=null,mpCat='Starters';
 let ticketCounter=85,payingTable=null,eightySixBoardOpen=false;
+
+// ── Demo data: pre-populate occupied tables so the app looks live ──
+tableSeating['T2']=[{cover:1,guestId:2},{cover:2,guestId:null},{cover:3,guestId:null}];
+tableSeating['T3']=[{cover:1,guestId:3},{cover:2,guestId:null}];
+tableSeating['T6']=[{cover:1,guestId:9},{cover:2,guestId:null}];
+tableSeating['T9']=[{cover:1,guestId:null},{cover:2,guestId:null}];
+tableSeating['L1']=[{cover:1,guestId:8},{cover:2,guestId:null}];
+tableSeating['L2']=[{cover:1,guestId:5},{cover:2,guestId:null},{cover:3,guestId:null}];
+tableSeating['B1']=[{cover:1,guestId:null}];
+tableSeating['B2']=[{cover:1,guestId:null}];
+tableWaiters['T2']='Ahmed';tableWaiters['T3']='Sara';tableWaiters['T6']='Sara';
+tableWaiters['T9']='Omar';tableWaiters['L1']='Fatima';tableWaiters['L2']='Ahmed';
+tableWaiters['B1']='Carlos';tableWaiters['B2']='Carlos';
+tableTimers['T2']=45;tableTimers['T3']=28;tableTimers['T6']=22;
+tableTimers['T9']=8;tableTimers['L1']=55;tableTimers['L2']=12;
+tableTimers['B1']=18;tableTimers['B2']=35;
+
+// T2 — Sara Mitchell (dairy) · P1 fired, P2 fired, P3 open
+tableOrders['T2']={courses:{
+  p1:{items:[{id:'f1',nm:'Hummus & Bread',p:38,e:'🫓',src:'kitchen',available:8,modCat:'starters',qty:2,dishNote:'',mods:[],seatNo:0},{id:'f2',nm:'Bruschetta',p:32,e:'🍅',src:'kitchen',available:6,modCat:'starters',qty:1,dishNote:'',mods:['Mild'],seatNo:0}],courseNote:'',fired:true,paceMin:0},
+  p2:{items:[{id:'m1',nm:'Grilled Salmon',p:95,e:'🐟',src:'kitchen',available:4,modCat:'mains',qty:1,dishNote:'No cream — dairy C1',mods:['No Sauce'],seatNo:1},{id:'m2',nm:'Wagyu Burger',p:88,e:'🍔',src:'kitchen',available:2,modCat:'mains',qty:1,dishNote:'Well done please',mods:['Well Done'],seatNo:2},{id:'m4',nm:'Chicken Tagine',p:82,e:'🍗',src:'kitchen',available:6,modCat:'mains',qty:1,dishNote:'',mods:['Extra Sauce'],seatNo:3}],courseNote:'C1 NO DAIRY — check sauce on salmon',fired:true,paceMin:20},
+  p3:{items:[],courseNote:'',fired:false,paceMin:15}
+}};
+// T3 — Omar Hassan · P1 fired, P2 open
+tableOrders['T3']={courses:{
+  p1:{items:[{id:'f4',nm:'Calamari',p:45,e:'🦑',src:'kitchen',available:7,modCat:'starters',qty:1,dishNote:'',mods:['Spicy'],seatNo:1},{id:'f3',nm:'Soup of Day',p:42,e:'🍲',src:'kitchen',available:5,modCat:'starters',qty:1,dishNote:'Extra bread please',mods:[],seatNo:2}],courseNote:'',fired:true,paceMin:0},
+  p2:{items:[{id:'m4',nm:'Chicken Tagine',p:82,e:'🍗',src:'kitchen',available:6,modCat:'mains',qty:1,dishNote:'',mods:['Medium'],seatNo:1}],courseNote:'',fired:false,paceMin:20},
+  p3:{items:[],courseNote:'',fired:false,paceMin:15}
+}};
+// T6 — James Wilson (shellfish allergy) · P1 open
+tableOrders['T6']={courses:{
+  p1:{items:[{id:'f1',nm:'Hummus & Bread',p:38,e:'🫓',src:'kitchen',available:8,modCat:'starters',qty:1,dishNote:'',mods:[],seatNo:1},{id:'f4',nm:'Calamari',p:45,e:'🦑',src:'kitchen',available:7,modCat:'starters',qty:1,dishNote:'VERIFY — shellfish allergy C1',mods:[],seatNo:2}],courseNote:'C1 SHELLFISH — confirm calamari is safe',fired:false,paceMin:0},
+  p2:{items:[],courseNote:'',fired:false,paceMin:20},
+  p3:{items:[],courseNote:'',fired:false,paceMin:15}
+}};
+// T9 — 2 covers, P1 in progress
+tableOrders['T9']={courses:{
+  p1:{items:[{id:'f3',nm:'Soup of Day',p:42,e:'🍲',src:'kitchen',available:5,modCat:'starters',qty:2,dishNote:'',mods:[],seatNo:0}],courseNote:'',fired:false,paceMin:0},
+  p2:{items:[],courseNote:'',fired:false,paceMin:20},
+  p3:{items:[],courseNote:'',fired:false,paceMin:15}
+}};
+// L1 — Layla & Karim (anniversary) · P2 fired, desserts open
+tableOrders['L1']={courses:{
+  p1:{items:[{id:'f2',nm:'Bruschetta',p:32,e:'🍅',src:'kitchen',available:6,modCat:'starters',qty:2,dishNote:'',mods:[],seatNo:0}],courseNote:'Anniversary couple',fired:true,paceMin:0},
+  p2:{items:[{id:'m1',nm:'Grilled Salmon',p:95,e:'🐟',src:'kitchen',available:4,modCat:'mains',qty:1,dishNote:'',mods:['Med-Rare'],seatNo:1},{id:'m5',nm:'Veggie Bowl',p:62,e:'🥗',src:'kitchen',available:8,modCat:'mains',qty:1,dishNote:'',mods:[],seatNo:2}],courseNote:'',fired:true,paceMin:20},
+  p3:{items:[{id:'s2',nm:'Chocolate Fondant',p:46,e:'🍫',src:'kitchen',available:5,qty:1,dishNote:'Candle please — anniversary',mods:[],seatNo:0}],courseNote:'🎂 Anniversary — add candle!',fired:false,paceMin:15}
+}};
+// L2 — Prince Al-Fahad VIP · full order
+tableOrders['L2']={courses:{
+  p1:{items:[{id:'f1',nm:'Hummus & Bread',p:38,e:'🫓',src:'kitchen',available:8,modCat:'starters',qty:1,dishNote:'',mods:[],seatNo:0},{id:'f4',nm:'Calamari',p:45,e:'🦑',src:'kitchen',available:7,modCat:'starters',qty:2,dishNote:'',mods:['Mild'],seatNo:0}],courseNote:'VIP — Prince Al-Fahad',fired:true,paceMin:0},
+  p2:{items:[{id:'m1',nm:'Grilled Salmon',p:95,e:'🐟',src:'kitchen',available:4,modCat:'mains',qty:1,dishNote:'',mods:['Medium','On Side'],seatNo:1},{id:'m2',nm:'Wagyu Burger',p:88,e:'🍔',src:'kitchen',available:2,modCat:'mains',qty:1,dishNote:'Med-rare',mods:['Med-Rare'],seatNo:2},{id:'m4',nm:'Chicken Tagine',p:82,e:'🍗',src:'kitchen',available:6,modCat:'mains',qty:1,dishNote:'',mods:[],seatNo:3}],courseNote:'VIP SERVICE',fired:true,paceMin:20},
+  p3:{items:[{id:'s1',nm:'Cheesecake',p:42,e:'🍰',src:'kitchen',available:6,qty:1,dishNote:'',mods:[],seatNo:0},{id:'s3',nm:'Baklava',p:36,e:'🍯',src:'kitchen',available:8,qty:2,dishNote:'',mods:[],seatNo:0}],courseNote:'',fired:false,paceMin:15}
+}};
+// Bar tabs with demo drinks
+orders_bar['B1']=[{id:'k1',nm:'Mojito',p:45,e:'🍹',src:'bar',available:99,modCat:'cocktail',q:2,mods:['Full Ice']},{id:'d3',nm:'Sparkling Water',p:14,e:'💧',src:'bar',available:99,q:1,mods:[]}];
+orders_bar['B2']=[{id:'k3',nm:'Old Fashioned',p:52,e:'🥃',src:'bar',available:99,modCat:'cocktail',q:1,mods:['Less Ice']},{id:'c1',nm:'Espresso',p:18,e:'☕',src:'bar',available:99,modCat:'coffee',q:2,mods:['Full Milk']}];
 const ALL_ITEMS=Object.values(MENU).flat().filter(x=>x.id);
 
 function toast(m,col){const t=$('tst');t.textContent=m;t.style.background=col||'var(--sb)';t.classList.add('sh');setTimeout(()=>t.classList.remove('sh'),2200);}
@@ -727,7 +782,7 @@ function dFloor(c){
     if(c.items.length){
       c.items.forEach((item,ii)=>{
         const rel=allergyCovers.length>0;
-        opHTML+=`<div class="ci-row ${c.fired?'fired-item':''}"><span class="ci-qty">${item.qty}×</span><div class="ci-main"><div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px"><span class="ci-nm">${item.nm}</span><span class="ci-dest ${item.src==='kitchen'?'dest-k':'dest-b'}">${item.src==='kitchen'?'🍳':'🍹'}</span>${rel?allergyCovers.map(s=>`<span class="ci-allergy">C${s.cover} ⚠️</span>`).join(''):''}</div>${!c.fired?`<input class="ci-note-input" placeholder="Dish note…" value="${item.dishNote||''}" oninput="setDishNote('${cDef.id}',${ii},this.value)">`:''}</div>${!c.fired?`<div style="display:flex;flex-direction:column;gap:2px"><button class="btn sm" style="padding:2px 7px;font-size:10px" onclick="chgCourseItem('${cDef.id}',${ii},1)">+</button><button class="btn sm" style="padding:2px 7px;font-size:10px" onclick="chgCourseItem('${cDef.id}',${ii},-1)">−</button></div>`:''}</div>`;
+        opHTML+=`<div class="ci-row ${c.fired?'fired-item':''}"><span class="ci-qty">${item.qty}×</span><div class="ci-main"><div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px"><span class="ci-nm">${item.nm}</span><span class="ci-dest ${item.src==='kitchen'?'dest-k':'dest-b'}">${item.src==='kitchen'?'🍳':'🍹'}</span>${rel?allergyCovers.map(s=>`<span class="ci-allergy">C${s.cover} ⚠️</span>`).join(''):''}</div>${item.mods&&item.mods.length?`<div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px">${item.mods.map(m=>`<span class="mod-pill on" style="${c.fired?'cursor:default':''}">${m}</span>`).join('')}</div>`:''} ${!c.fired?`<input class="ci-note-input" placeholder="Dish note…" value="${item.dishNote||''}" oninput="setDishNote('${cDef.id}',${ii},this.value)">`:item.dishNote?`<div style="font-size:9px;color:#a16207;margin-top:1px">📝 ${item.dishNote}</div>`:''} ${!c.fired&&item.modCat&&MODS[item.modCat]?`<div class="mod-row">${MODS[item.modCat].flatMap(mod=>[`<span style="font-size:9px;color:var(--tx3);font-weight:600;margin-right:2px;align-self:center">${mod.lbl}:</span>`,...mod.opts.map(opt=>`<span class="mod-pill ${(item.mods||[]).includes(opt)?'on':''}" onclick="toggleMod('${cDef.id}',${ii},'${opt}')">${opt}</span>`)]).join('')}</div>`:''}</div>${!c.fired?`<div style="display:flex;flex-direction:column;gap:2px"><button class="btn sm" style="padding:2px 7px;font-size:10px" onclick="chgCourseItem('${cDef.id}',${ii},1)">+</button><button class="btn sm" style="padding:2px 7px;font-size:10px" onclick="chgCourseItem('${cDef.id}',${ii},-1)">−</button></div>`:''}</div>`;
       });
     } else if(!c.fired){opHTML+=`<div style="padding:7px 12px;font-size:10px;color:var(--tx3);font-style:italic">No items — tap + Add</div>`;}
     if(!c.fired){
@@ -771,7 +826,7 @@ function selectTable(id){aT=id;mpOpenCourse=null;if(vw==='floor')dFloor($('ct'))
 function addCover(d){const seats=getSeating(aT);if(d>0)seats.push({cover:seats.length+1,guestId:null});else if(seats.length>1)seats.pop();dFloor($('ct'));}
 function showGSR(idx){const el=$('gsr-'+idx);if(el)el.classList.add('open');}
 function searchGuest(q,idx){const el=$('gsr-'+idx);if(!el)return;const filtered=GUESTS.filter(g=>g.nm.toLowerCase().includes(q.toLowerCase()));el.innerHTML=filtered.map(gg=>`<div class="gsr" onclick="assignGuest(${idx},'${gg.id}')"><div class="gsr-av" style="background:${gg.col};color:${gg.tc}">${gg.i}</div><div><div class="gsr-nm">${gg.nm}</div><div class="gsr-sub">${gg.tags[0]||'—'}${gg.allergies.length?` · ⚠️ ${gg.allergies.slice(0,2).join(', ')}`:''}</div></div></div>`).join('');el.classList.add('open');}
-function assignGuest(idx,guestId){const seats=getSeating(aT);seats[idx].guestId=parseInt(guestId)||guestId;const g=getGuest(parseInt(guestId)||guestId);if(g){toast(`${g.nm} → Cover ${seats[idx].cover}`+(g.allergies.length?` ⚠️ ${g.allergies.join(', ')}':''),'#92400e');}if(TABLES.find(t=>t.id===aT))TABLES.find(t=>t.id===aT).st='occupied';dFloor($('ct'));}
+function assignGuest(idx,guestId){const seats=getSeating(aT);seats[idx].guestId=parseInt(guestId)||guestId;const g=getGuest(parseInt(guestId)||guestId);if(g){toast(`${g.nm} → Cover ${seats[idx].cover}`+(g.allergies.length?` ⚠️ ${g.allergies.join(', ')}':''),'#92400e');}if(TABLES.find(t=>t.id===aT)){TABLES.find(t=>t.id===aT).st='occupied';tableTimers[aT]=tableTimers[aT]||0;tableWaiters[aT]=tableWaiters[aT]||currentWaiter;}dFloor($('ct'));}
 function clearCover(idx){getSeating(aT)[idx].guestId=null;dFloor($('ct'));}
 function openMpicker(courseId){mpOpenCourse=mpOpenCourse===courseId?null:courseId;dFloor($('ct'));}
 function setMpCat(cat,courseId){mpCat=cat;mpOpenCourse=courseId;dFloor($('ct'));}
@@ -936,8 +991,8 @@ function dCRM(c){
   c.innerHTML=`<div class="crm-grid">
     <div class="pn" style="overflow:hidden;display:flex;flex-direction:column">
       <div class="ph"><h3>Guests (${GUESTS.length})</h3><button class="btn sm pr" onclick="toast('Add guest — coming soon')">+ New</button></div>
-      <div style="padding:8px 12px;border-bottom:1px solid var(--brd)"><input style="width:100%;padding:6px 10px;border:1px solid var(--brd);border-radius:7px;font-size:12px;background:var(--sur2);color:var(--tx1)" placeholder="Search guests…"></div>
-      <div class="guest-list">${GUESTS.map((gg,idx)=>`<div class="guest-row ${gg.id===g.id?'on':''}" onclick="selG(${gg.id})"><div class="gr-av" style="background:${colors[idx%colors.length]};color:${tcs[idx%tcs.length]}">${gg.i}</div><div style="flex:1"><div class="gr-nm">${gg.nm}</div><div class="gr-sub">${gg.tags[0]||'Guest'} · ${gg.stays} stays${gg.allergies.length?` · ⚠️ ${gg.allergies.length} allergy`:''}</div></div>${gg.room&&gg.room!=='Checked out'?`<span class="pill p-amber" style="font-size:9px">Rm ${gg.room}</span>`:''}</div>`).join('')}</div>
+      <div style="padding:8px 12px;border-bottom:1px solid var(--brd)"><input id="crm-search" style="width:100%;padding:6px 10px;border:1px solid var(--brd);border-radius:7px;font-size:12px;background:var(--sur2);color:var(--tx1)" placeholder="Search guests…" oninput="searchCRM(this.value)"></div>
+      <div class="guest-list" id="crm-guest-list">${GUESTS.map((gg,idx)=>`<div class="guest-row ${gg.id===g.id?'on':''}" onclick="selG(${gg.id})"><div class="gr-av" style="background:${colors[idx%colors.length]};color:${tcs[idx%tcs.length]}">${gg.i}</div><div style="flex:1"><div class="gr-nm">${gg.nm}</div><div class="gr-sub">${gg.tags[0]||'Guest'} · ${gg.stays} stays${gg.allergies.length?` · ⚠️ ${gg.allergies.length} allergy`:''}</div></div>${gg.room&&gg.room!=='Checked out'?`<span class="pill p-amber" style="font-size:9px">Rm ${gg.room}</span>`:''}</div>`).join('')}</div>
     </div>
     <div class="pn" style="overflow:hidden;display:flex;flex-direction:column">
       <div class="gd-hero">
@@ -957,6 +1012,14 @@ function dCRM(c){
   </div>`;
 }
 function selG(id){selGuest=GUESTS.find(g=>g.id===id)||GUESTS[0];dCRM($('ct'));}
+function searchCRM(q){
+  const list=$('crm-guest-list');if(!list)return;
+  const colors=['#fef3c7','#dbeafe','#dcfce7','#f3e8ff','#fee2e2','#fef3c7','#dbeafe','#dcfce7','#fee2e2','#f0ede6'];
+  const tcs=['#92400e','#1e40af','#15803d','#7e22ce','#b91c1c','#92400e','#1e40af','#15803d','#b91c1c','#52504a'];
+  const filtered=q?GUESTS.filter(g=>g.nm.toLowerCase().includes(q.toLowerCase())||g.tags.some(t=>t.toLowerCase().includes(q.toLowerCase()))):GUESTS;
+  list.innerHTML=filtered.map((gg,idx)=>{const i=GUESTS.indexOf(gg);return`<div class="guest-row ${gg.id===selGuest.id?'on':''}" onclick="selG(${gg.id})"><div class="gr-av" style="background:${colors[i%colors.length]};color:${tcs[i%tcs.length]}">${gg.i}</div><div style="flex:1"><div class="gr-nm">${gg.nm}</div><div class="gr-sub">${gg.tags[0]||'Guest'} · ${gg.stays} stays${gg.allergies.length?` · ⚠️ ${gg.allergies.length} allergy`:''}</div></div>${gg.room&&gg.room!=='Checked out'?`<span class="pill p-amber" style="font-size:9px">Rm ${gg.room}</span>`:''}</div>`;}).join('');
+  if(!filtered.length)list.innerHTML=`<div style="padding:20px;text-align:center;font-size:12px;color:var(--tx3)">No guests found</div>`;
+}
 
 function dRep(c){
   var lowSellers=ALL_ITEMS.filter(function(i){return i.src==="kitchen"&&i.available<=3&&!i.eightySixed;});
