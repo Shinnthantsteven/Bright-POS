@@ -697,6 +697,41 @@ function refreshSplitDetail(){
   }
 }
 function toggleMod(courseId,idx,opt){const item=getOrder(aT).courses[courseId].items[idx];if(!item.mods)item.mods=[];const i=item.mods.indexOf(opt);if(i>=0)item.mods.splice(i,1);else item.mods.push(opt);dFloor($('ct'));}
+function buildModHTML(item,courseId,idx,fired){
+  if(!item.modCat||!MODS[item.modCat])return'';
+  if(fired)return'';
+  var html='<div class="mod-row">';
+  MODS[item.modCat].forEach(function(mod){
+    html+='<span style="font-size:9px;color:var(--tx3);font-weight:600;margin-right:2px">'+mod.lbl+':</span>';
+    mod.opts.forEach(function(opt){
+      var sel=(item.mods||[]).indexOf(opt)>=0;
+      html+='<span class="mod-pill'+(sel?' on':'')+'" onclick="toggleMod(\''+courseId+'\','+idx+',\''+opt+'\')">'+opt+'</span>';
+    });
+  });
+  html+='</div>';
+  return html;
+}
+function buildFiredModsHTML(item){
+  if(!item.mods||!item.mods.length)return'';
+  return'<div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px">'+item.mods.map(function(m){return'<span class="mod-pill on" style="cursor:default">'+m+'</span>';}).join('')+'</div>';
+}
+function buildCoverCardHTML(seat,idx){
+  var g=seat.guestId?getGuest(seat.guestId):null;
+  var inner='';
+  if(g){
+    var tags=g.allergies.map(function(a){return'<span class="atag">'+a+'</span>';}).join('')+g.avoids.map(function(a){return'<span class="atag avoid">\u2717 '+a+'</span>';}).join('');
+    var pref=g.pref?'<div style="font-size:9px;color:var(--at);margin-top:1px;line-height:1.3">\uD83D\uDCAC '+g.pref.substring(0,55)+(g.pref.length>55?'\u2026':'')+'</div>':'';
+    inner='<div style="flex:1"><div class="cc-nm">'+g.nm+'</div>'+pref+'<div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px">'+tags+'</div></div><button onclick="clearCover('+idx+')" style="border:none;background:none;color:var(--tx3);cursor:pointer;font-size:13px">\u00D7</button>';
+  }else{
+    var gsrHTML=GUESTS.map(function(gg){
+      var sub=(gg.tags[0]||'\u2014')+(gg.allergies.length?' \u00B7 \u26A0\uFE0F '+gg.allergies.slice(0,2).join(', '):'');
+      return'<div class="gsr" onclick="assignGuest('+idx+',\''+gg.id+'\')"><div class="gsr-av" style="background:'+gg.col+';color:'+gg.tc+'">'+gg.i+'</div><div><div class="gsr-nm">'+gg.nm+'</div><div class="gsr-sub">'+sub+'</div></div></div>';
+    }).join('');
+    inner='<div style="flex:1;position:relative"><input class="gsearch" id="gs-'+idx+'" placeholder="Assign guest\u2026" oninput="searchGuest(this.value,'+idx+')" onfocus="showGSR('+idx+')"><div class="gsearch-results" id="gsr-'+idx+'">'+gsrHTML+'</div></div>';
+  }
+  var cls='cover-card'+(g?' has-guest':'')+(g&&(g.allergies.length||g.avoids.length)?' has-allergy':'');
+  return'<div class="'+cls+'"><div class="cc-top"><div class="cc-num">'+seat.cover+'</div>'+inner+'</div></div>';
+}
 function setPaceMin(courseId,v){var ord=getOrder(aT);if(ord.courses[courseId])ord.courses[courseId].paceMin=parseInt(v);}
 function setSeatNo(courseId,idx,v){getOrder(aT).courses[courseId].items[idx].seatNo=parseInt(v)||0;}
 function voidItem(courseId,idx){const item=getOrder(aT).courses[courseId].items[idx];openPin('Manager PIN — Void Item','Void: '+item.qty+'× '+item.nm,()=>{getOrder(aT).courses[courseId].items.splice(idx,1);toast('⛔ Voided: '+item.nm,'#b91c1c');dFloor($('ct'));});}
@@ -761,16 +796,7 @@ function dFloor(c){
         <button class="btn sm" onclick="addCover(1)">+</button>
       </div>
     </div>
-    ${seats.map((seat,idx)=>{
-      const g=seat.guestId?getGuest(seat.guestId):null;
-      return`<div class="cover-card ${g?'has-guest':''} ${g&&(g.allergies.length||g.avoids.length)?'has-allergy':''}">
-        <div class="cc-top">
-          <div class="cc-num">${seat.cover}</div>
-          ${g?`<div style="flex:1"><div class="cc-nm">${g.nm}</div>${g.pref?`<div style="font-size:9px;color:var(--at);margin-top:1px;line-height:1.3">💬 ${g.pref.substring(0,55)}${g.pref.length>55?"…":""}</div>`:""}<div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px">${g.allergies.map(a=>`<span class="atag">${a}</span>`).join('')}${g.avoids.map(a=>`<span class="atag avoid">✗ ${a}</span>`).join('')}</div></div><button onclick="clearCover(${idx})" style="border:none;background:none;color:var(--tx3);cursor:pointer;font-size:13px">×</button>`
-          :`<div style="flex:1;position:relative"><input class="gsearch" id="gs-${idx}" placeholder="Assign guest…" oninput="searchGuest(this.value,${idx})" onfocus="showGSR(${idx})"><div class="gsearch-results" id="gsr-${idx}">${GUESTS.map(gg=>`<div class="gsr" onclick="assignGuest(${idx},'${gg.id}')"><div class="gsr-av" style="background:${gg.col};color:${gg.tc}">${gg.i}</div><div><div class="gsr-nm">${gg.nm}</div><div class="gsr-sub">${gg.tags[0]||'—'}${gg.allergies.length?` · ⚠️ ${gg.allergies.slice(0,2).join(', ')}`:''}</div></div></div>`).join('')}</div></div>`}
-        </div>
-      </div>`;
-    }).join('')}
+    ${seats.map((seat,idx)=>buildCoverCardHTML(seat,idx)).join('')}
   </div>`;
   if(allergyCovers.length){
     opHTML+=`<div class="allergy-banner"><div class="ab-title">⚠️ Dietary Alerts — ${aT}</div>${allergyCovers.map(s=>{const g=getGuest(s.guestId);return`<div class="ab-row"><span class="ab-cover">Cover ${s.cover}</span><div style="flex:1;display:flex;flex-wrap:wrap;gap:2px">${g.allergies.map(a=>`<span class="ab-tag">${a}</span>`).join('')}${g.avoids.map(a=>`<span class="ab-avoid">✗ ${a}</span>`).join('')}</div></div>`;}).join('')}</div>`;
@@ -782,7 +808,10 @@ function dFloor(c){
     if(c.items.length){
       c.items.forEach((item,ii)=>{
         const rel=allergyCovers.length>0;
-        opHTML+=`<div class="ci-row ${c.fired?'fired-item':''}"><span class="ci-qty">${item.qty}×</span><div class="ci-main"><div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px"><span class="ci-nm">${item.nm}</span><span class="ci-dest ${item.src==='kitchen'?'dest-k':'dest-b'}">${item.src==='kitchen'?'🍳':'🍹'}</span>${rel?allergyCovers.map(s=>`<span class="ci-allergy">C${s.cover} ⚠️</span>`).join(''):''}</div>${item.mods&&item.mods.length?`<div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px">${item.mods.map(m=>`<span class="mod-pill on" style="${c.fired?'cursor:default':''}">${m}</span>`).join('')}</div>`:''} ${!c.fired?`<input class="ci-note-input" placeholder="Dish note…" value="${item.dishNote||''}" oninput="setDishNote('${cDef.id}',${ii},this.value)">`:item.dishNote?`<div style="font-size:9px;color:#a16207;margin-top:1px">📝 ${item.dishNote}</div>`:''} ${!c.fired&&item.modCat&&MODS[item.modCat]?`<div class="mod-row">${MODS[item.modCat].flatMap(mod=>[`<span style="font-size:9px;color:var(--tx3);font-weight:600;margin-right:2px;align-self:center">${mod.lbl}:</span>`,...mod.opts.map(opt=>`<span class="mod-pill ${(item.mods||[]).includes(opt)?'on':''}" onclick="toggleMod('${cDef.id}',${ii},'${opt}')">${opt}</span>`)]).join('')}</div>`:''}</div>${!c.fired?`<div style="display:flex;flex-direction:column;gap:2px"><button class="btn sm" style="padding:2px 7px;font-size:10px" onclick="chgCourseItem('${cDef.id}',${ii},1)">+</button><button class="btn sm" style="padding:2px 7px;font-size:10px" onclick="chgCourseItem('${cDef.id}',${ii},-1)">−</button></div>`:''}</div>`;
+        var allergyHTML=rel?allergyCovers.map(function(s){return'<span class="ci-allergy">C'+s.cover+' ⚠️</span>';}).join(''):'';
+        var noteHTML=!c.fired?'<input class="ci-note-input" placeholder="Dish note\u2026" value="'+(item.dishNote||'')+'" oninput="setDishNote(\''+cDef.id+'\','+ii+',this.value)">':item.dishNote?'<div style="font-size:9px;color:#a16207;margin-top:1px">📝 '+item.dishNote+'</div>':'';
+        var qtyHTML=!c.fired?'<div style="display:flex;flex-direction:column;gap:2px"><button class="btn sm" style="padding:2px 7px;font-size:10px" onclick="chgCourseItem(\''+cDef.id+'\','+ii+',1)">+</button><button class="btn sm" style="padding:2px 7px;font-size:10px" onclick="chgCourseItem(\''+cDef.id+'\','+ii+',-1)">−</button></div>':'';
+        opHTML+='<div class="ci-row '+(c.fired?'fired-item':'')+'"><span class="ci-qty">'+item.qty+'×</span><div class="ci-main"><div style="display:flex;align-items:center;flex-wrap:wrap;gap:2px"><span class="ci-nm">'+item.nm+'</span><span class="ci-dest '+(item.src==='kitchen'?'dest-k':'dest-b')+'">'+(item.src==='kitchen'?'🍳':'🍹')+'</span>'+allergyHTML+'</div>'+buildFiredModsHTML(item)+noteHTML+buildModHTML(item,cDef.id,ii,c.fired)+'</div>'+qtyHTML+'</div>';
       });
     } else if(!c.fired){opHTML+=`<div style="padding:7px 12px;font-size:10px;color:var(--tx3);font-style:italic">No items — tap + Add</div>`;}
     if(!c.fired){
@@ -826,7 +855,7 @@ function selectTable(id){aT=id;mpOpenCourse=null;if(vw==='floor')dFloor($('ct'))
 function addCover(d){const seats=getSeating(aT);if(d>0)seats.push({cover:seats.length+1,guestId:null});else if(seats.length>1)seats.pop();dFloor($('ct'));}
 function showGSR(idx){const el=$('gsr-'+idx);if(el)el.classList.add('open');}
 function searchGuest(q,idx){const el=$('gsr-'+idx);if(!el)return;const filtered=GUESTS.filter(g=>g.nm.toLowerCase().includes(q.toLowerCase()));el.innerHTML=filtered.map(gg=>`<div class="gsr" onclick="assignGuest(${idx},'${gg.id}')"><div class="gsr-av" style="background:${gg.col};color:${gg.tc}">${gg.i}</div><div><div class="gsr-nm">${gg.nm}</div><div class="gsr-sub">${gg.tags[0]||'—'}${gg.allergies.length?` · ⚠️ ${gg.allergies.slice(0,2).join(', ')}`:''}</div></div></div>`).join('');el.classList.add('open');}
-function assignGuest(idx,guestId){const seats=getSeating(aT);seats[idx].guestId=parseInt(guestId)||guestId;const g=getGuest(parseInt(guestId)||guestId);if(g){toast(`${g.nm} → Cover ${seats[idx].cover}`+(g.allergies.length?` ⚠️ ${g.allergies.join(', ')}':''),'#92400e');}if(TABLES.find(t=>t.id===aT)){TABLES.find(t=>t.id===aT).st='occupied';tableTimers[aT]=tableTimers[aT]||0;tableWaiters[aT]=tableWaiters[aT]||currentWaiter;}dFloor($('ct'));}
+function assignGuest(idx,guestId){const seats=getSeating(aT);seats[idx].guestId=parseInt(guestId)||guestId;const g=getGuest(parseInt(guestId)||guestId);if(g){toast(`${g.nm} → Cover ${seats[idx].cover}`+(g.allergies.length?` ⚠️ ${g.allergies.join(', ')}` :''),'#92400e');}if(TABLES.find(t=>t.id===aT)){TABLES.find(t=>t.id===aT).st='occupied';tableTimers[aT]=tableTimers[aT]||0;tableWaiters[aT]=tableWaiters[aT]||currentWaiter;}dFloor($('ct'));}
 function clearCover(idx){getSeating(aT)[idx].guestId=null;dFloor($('ct'));}
 function openMpicker(courseId){mpOpenCourse=mpOpenCourse===courseId?null:courseId;dFloor($('ct'));}
 function setMpCat(cat,courseId){mpCat=cat;mpOpenCourse=courseId;dFloor($('ct'));}
