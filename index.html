@@ -302,6 +302,72 @@ body{background:var(--sur2);overflow:hidden}
 .tr.disc{color:#15803d}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--brd);border-radius:2px}
 .eb-panel{position:fixed;top:0;right:0;width:290px;height:100vh;background:var(--sur);border-left:1px solid var(--brd);z-index:150;display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.12)}
+
+/* ── Mobile-responsive helper classes (replaced inline grid styles in JS) ── */
+.dash-panels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.bar-wrap{display:grid;grid-template-columns:1fr 280px;gap:14px;height:calc(100vh - 100px)}
+.bar-tickets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.rep-top-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.rep-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
+.staff-top-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+
+/* ══════════════ MOBILE RESPONSIVE ══════════════ */
+@media(max-width:768px){
+  body{overflow:auto}
+  /* App shell: sidebar moves to bottom nav */
+  .app{grid-template-columns:1fr;grid-template-rows:1fr 56px;height:100dvh;min-height:-webkit-fill-available}
+  .main{grid-row:1;overflow:hidden;display:flex;flex-direction:column}
+  .sb{grid-row:2;flex-direction:row;align-items:center;justify-content:space-around;padding:0 2px;height:56px;overflow-x:auto;overflow-y:hidden;border-top:1px solid rgba(255,255,255,.1)}
+  .logo-wrap,.sbsep{display:none}
+  .sbot{margin-top:0;flex-direction:row;gap:0}
+  .sbb{width:38px;height:46px;flex-shrink:0;gap:1px}
+  .sbb span{font-size:7.5px}
+  /* Topbar */
+  .tb{padding:0 10px;height:44px}
+  #tbtl{display:none}
+  /* Content area */
+  .ct{padding:10px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  /* Dashboard */
+  .sg{grid-template-columns:repeat(2,1fr);gap:8px}
+  .dash-panels{grid-template-columns:1fr}
+  /* Floor */
+  .floor-wrap{grid-template-columns:1fr;height:auto}
+  .floor-canvas{height:260px;overflow:auto;-webkit-overflow-scrolling:touch}
+  /* Bar */
+  .bar-wrap{grid-template-columns:1fr;height:auto}
+  .bar-tickets-grid{grid-template-columns:repeat(2,1fr)}
+  /* KDS */
+  .kg{grid-template-columns:1fr}
+  /* Hotel */
+  .hotel-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  /* Reservations */
+  .res-grid{grid-template-columns:1fr}
+  /* CRM */
+  .crm-grid{grid-template-columns:1fr;height:auto}
+  .gd-stats{grid-template-columns:repeat(2,1fr)}
+  /* Reports */
+  .rep-top-stats{grid-template-columns:repeat(2,1fr)}
+  .rep-3col{grid-template-columns:1fr}
+  .rpg{grid-template-columns:1fr 1fr}
+  /* Staff */
+  .staff-top-stats{grid-template-columns:repeat(2,1fr)}
+  /* 86-board slides up from bottom on mobile */
+  .eb-panel{width:100%;top:auto;bottom:56px;height:60vh;border-left:none;border-top:1px solid var(--brd);box-shadow:0 -4px 24px rgba(0,0,0,.12)}
+  /* Modals */
+  .pay-box{width:96vw;padding:16px;max-height:85vh;overflow-y:auto}
+  .modal{width:96vw;padding:16px;max-height:85vh}
+  .pin-box{width:92vw;max-width:320px}
+  /* Forms */
+  .form-grid{grid-template-columns:1fr}
+  /* Misc */
+  .rm2{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .bar-tickets-grid{grid-template-columns:1fr}
+  .rep-top-stats{grid-template-columns:1fr 1fr}
+  .staff-top-stats{grid-template-columns:1fr 1fr}
+  .kg{grid-template-columns:1fr}
+}
 .eb-hd{padding:14px 16px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .eb-hd h3{font-size:13px;font-weight:700;color:var(--tx1)}
 .eb-row{display:flex;align-items:center;gap:6px;padding:9px 14px;border-bottom:1px solid var(--brd)}
@@ -754,7 +820,7 @@ function dDash(c){
     <div class="sc"><div class="lb">F&amp;B Revenue</div><div class="vl">AED 7,240</div><div class="s2">Kitchen + Bar</div><div class="dt" style="background:var(--teal)"></div></div>
     <div class="sc"><div class="lb">86'd Items</div><div class="vl" style="color:#dc2626">1</div><div class="s2">Pasta Carbonara</div><div class="dt" style="background:var(--r)"></div></div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+  <div class="dash-panels">
     <div class="pn"><div class="ph"><h3>Quick Room Status</h3><span class="se" onclick="go('hotel')">All 25 →</span></div>
       <div style="padding:12px;display:grid;grid-template-columns:repeat(5,1fr);gap:5px">
         ${ROOMS.map(r=>{const bg={occupied:'#fef3c7',vacant:'#f0fdf4',checkout:'#fee2e2',cleaning:'#eff6ff'}[r.st];const c2={occupied:'#d97706',vacant:'#16a34a',checkout:'#dc2626',cleaning:'#2563eb'}[r.st];return`<div style="background:${bg};border-radius:5px;padding:4px;text-align:center;cursor:pointer" onclick="go('hotel')"><div style="font-size:9px;font-weight:700;color:${c2}">${r.n}</div></div>`;}).join('')}
@@ -886,7 +952,7 @@ function dBar(c){
   const sub=or.reduce((s,i)=>s+i.p*i.q,0);const tot=sub*1.05;
   const barMenuItems=[...MENU.Cocktails,...MENU.Drinks,...MENU.Coffee];
   const filtered=aC==='All'?barMenuItems:(MENU[aC]||[]);
-  c.innerHTML=`<div style="display:grid;grid-template-columns:1fr 280px;gap:14px;height:calc(100vh - 100px)">
+  c.innerHTML=`<div class="bar-wrap">
     <div style="display:flex;flex-direction:column;gap:10px;overflow:hidden">
       <div style="display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0">
         ${['All','Cocktails','Drinks','Coffee'].map(k=>`<button class="chip ${k===aC?'on':''}" onclick="setBarCat('${k}')">${k}</button>`).join('')}
@@ -897,7 +963,7 @@ function dBar(c){
       </div>
       <div style="flex-shrink:0">
         <div style="font-size:11px;font-weight:600;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Active Bar Tickets</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+        <div class="bar-tickets-grid">
           ${BAR_TICKETS.map(tk=>{const tc=tk.m>8?'tlt':tk.m>4?'twn':'tok';return`<div class="tk"><div class="tkh"><div><div class="tn">${tk.id}</div><div class="tt">${tk.tb}</div></div><span class="tkt ${tc}">${tk.m}m</span></div><div class="tki">${tk.it.map(x=>`<div class="tkr"><span class="tkq">${x.q}×</span><span class="tkn">${x.n}</span></div>`).join('')}</div></div>`;}).join('')}
         </div>
       </div>
@@ -1053,9 +1119,9 @@ function searchCRM(q){
 function dRep(c){
   var lowSellers=ALL_ITEMS.filter(function(i){return i.src==="kitchen"&&i.available<=3&&!i.eightySixed;});
 
-  c.innerHTML=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">${[['Total Revenue','AED 21,840','+22%'],['Hotel Revenue','AED 14,600','60 room nights'],['F&B Revenue','AED 7,240','47 covers'],['Bar Revenue','AED 3,180','Bar + cocktails']].map(([l,v,s])=>`<div class="sc"><div class="lb">${l}</div><div class="vl" style="font-size:18px">${v}</div><div class="s2">${s}</div></div>`).join('')}</div>
+  c.innerHTML=`<div class="rep-top-stats">${[['Total Revenue','AED 21,840','+22%'],['Hotel Revenue','AED 14,600','60 room nights'],['F&B Revenue','AED 7,240','47 covers'],['Bar Revenue','AED 3,180','Bar + cocktails']].map(([l,v,s])=>`<div class="sc"><div class="lb">${l}</div><div class="vl" style="font-size:18px">${v}</div><div class="s2">${s}</div></div>`).join('')}</div>
   ${lowSellers.length?`<div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px"><span style="font-size:18px">⚠️</span><div><div style="font-size:12px;font-weight:700;color:#92400e">Low Stock Alert — Push These Items</div><div style="font-size:11px;color:#a16207;margin-top:2px">${lowSellers.map(i=>i.nm+" ("+i.available+" left)").join(" · ")}</div></div></div>`:""}
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px">
+  <div class="rep-3col">
     <div class="pn" style="padding:14px"><div class="ph" style="padding:0;margin-bottom:12px;border:none"><h3>F&B by Category</h3></div>${[['Mains',72],['Cocktails',58],['Coffee',38],['Drinks',26],['Starters',22],['Desserts',18]].map(([l,v])=>`<div class="br"><span class="brl">${l}</span><div class="brt"><div class="brf" style="width:${v}%"></div></div><span class="brv">AED ${Math.round(v*45)}</span></div>`).join('')}</div>
     <div class="pn" style="padding:14px"><div class="ph" style="padding:0;margin-bottom:12px;border:none"><h3>Room Revenue by Type</h3></div>${[['Suite/PH',85],['Jr Suite',68],['Deluxe',52],['Standard',30]].map(([l,v])=>`<div class="br"><span class="brl">${l}</span><div class="brt"><div class="brf" style="width:${v}%;background:var(--p)"></div></div><span class="brv">AED ${Math.round(v*90)}</span></div>`).join('')}</div>
     <div class="pn" style="padding:14px"><div class="ph" style="padding:0;margin-bottom:12px;border:none"><h3>Bookings by Source</h3></div>${[['Booking.com',55,'#003580'],['Direct',28,'#15803d'],['Expedia',12,'#00355f'],['Airbnb',5,'#ff5a5f']].map(([l,v,col])=>`<div class="br"><span class="brl">${l}</span><div class="brt"><div class="brf" style="width:${v}%;background:${col}"></div></div><span class="brv">${v}%</span></div>`).join('')}</div>
@@ -1071,7 +1137,7 @@ function dRep(c){
 function dStaff(c){
   const wt=[{nm:'Ahmed',tb:8,cv:24,sl:4820,vd:1,cp:0,av:201},{nm:'Sara',tb:6,cv:19,sl:3940,vd:0,cp:1,av:207},{nm:'Omar',tb:5,cv:14,sl:2180,vd:2,cp:0,av:156},{nm:'Fatima',tb:4,cv:10,sl:1620,vd:0,cp:1,av:162},{nm:'Carlos',tb:3,cv:8,sl:1280,vd:1,cp:0,av:160}];
   c.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:14px;align-items:center"><h2 style="font-size:15px;font-weight:700;color:var(--tx1)">Staff Performance — Today</h2><div style="margin-left:auto;display:flex;gap:6px"><button class="btn" onclick="toast('Exported')">Export</button><button class="btn pr" onclick="dayEndReport()">📋 Close Day</button></div></div>
-  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px">${[['Staff On Shift',wt.length,'Active today'],['Total Covers',79,'All waiters'],['F&B Sales','AED 13,840','Combined'],['Voids',4,'PIN verified'],['Comps',2,'Mgr auth']].map(([l,v,s])=>`<div class="sc"><div class="lb">${l}</div><div class="vl" style="font-size:18px">${v}</div><div class="s2">${s}</div></div>`).join('')}</div>
+  <div class="staff-top-stats">${[['Staff On Shift',wt.length,'Active today'],['Total Covers',79,'All waiters'],['F&B Sales','AED 13,840','Combined'],['Voids',4,'PIN verified'],['Comps',2,'Mgr auth']].map(([l,v,s])=>`<div class="sc"><div class="lb">${l}</div><div class="vl" style="font-size:18px">${v}</div><div class="s2">${s}</div></div>`).join('')}</div>
   <div class="pn"><div class="ph"><h3>Waiter Breakdown</h3></div>
     <table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--sur2)">${['Waiter','Tables','Covers','Sales','Avg/Cover','Voids','Comps',''].map(h=>`<th style="padding:9px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;border-bottom:1px solid var(--brd)">${h}</th>`).join('')}</tr></thead>
     <tbody>${wt.map((w,i)=>`<tr style="border-bottom:1px solid var(--brd)${i===0?';background:var(--al)':''}"><td style="padding:9px 14px"><div style="font-size:13px;font-weight:600;color:var(--tx1)">${w.nm}</div>${i===0?`<span style="font-size:9px;background:var(--acc);color:#111;padding:1px 6px;border-radius:8px;font-weight:700">🏆 Top Seller</span>`:""}</td><td style="padding:9px 14px;font-size:12px">${w.tb}</td><td style="padding:9px 14px;font-size:12px">${w.cv}</td><td style="padding:9px 14px;font-size:12px;font-weight:700;font-family:'DM Mono',monospace">AED ${w.sl.toLocaleString()}</td><td style="padding:9px 14px;font-size:12px;font-family:'DM Mono',monospace">AED ${w.av}</td><td style="padding:9px 14px;font-size:12px;color:${w.vd>0?'#b91c1c':'var(--tx3)'}">${w.vd}</td><td style="padding:9px 14px;font-size:12px;color:${w.cp>0?'#a16207':'var(--tx3)'}">${w.cp}</td><td style="padding:9px 14px"><button class="btn sm" onclick="toast('${w.nm} printed')">Print</button></td></tr>`).join('')}
