@@ -6,7 +6,7 @@ A single-file HTML application combining POS, Kitchen CDP, Hotel Management, CRM
 
 ## 🚀 How to Use
 
-1. Download `bright-pos.html`
+1. Open `index.html`, or host the folder (GitHub Pages/Netlify) to install it as an app
 2. Open in any modern browser (Chrome recommended)
 3. No server, no install — runs entirely offline
 
@@ -104,7 +104,7 @@ Used for: Void items
 ## 🗂️ File Structure
 
 ```
-bright-pos.html    ← entire app (single file, ~111KB)
+index.html    ← entire app (single file, ~111KB)
 README.md          ← this file
 ```
 
@@ -130,3 +130,12 @@ README.md          ← this file
 ---
 
 *Built with Bright — The hospitality OS for independent hotels & restaurants.*
+
+---
+
+## 🆕 Latest update
+- New sun-and-cloche icon: favicon, iPhone/iPad home-screen icon, Android maskable icon
+- Installable app (manifest) that works offline (service worker)
+- Autosave: orders, tables, rooms, reservations and stock survive refresh and restart
+- Settings: change the Manager PIN (default 1234) and reset demo data
+- iPhone: open the hosted site in Safari → Share → Add to Home Screen (this needs hosting; opening the file directly won't install it)

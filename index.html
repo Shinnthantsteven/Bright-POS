@@ -2,7 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bright — All-in-One</title>
+<title>Bright POS — Hotel & Restaurant</title>
+<meta name="theme-color" content="#111110">
+<meta name="description" content="Bright — all-in-one hotel & restaurant POS">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+<link rel="shortcut icon" href="icons/favicon.ico">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icons/apple-touch-icon-120.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/apple-touch-icon-152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icons/apple-touch-icon-167.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Bright POS">
+<meta name="format-detection" content="telephone=no">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -14,7 +31,8 @@
   --g:#22c55e;--r:#ef4444;--b:#3b82f6;--p:#8b5cf6;--teal:#0d9488;
   font-family:'DM Sans',sans-serif;
 }
-body{background:var(--sur2);overflow:hidden}
+html,body{overscroll-behavior:none}
+body{background:var(--sur2);overflow:hidden;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .app{display:grid;grid-template-columns:64px 1fr;height:100vh}
 .sb{background:var(--sb);display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:1px;overflow:hidden}
 .logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:8px;flex-shrink:0;cursor:pointer}
@@ -422,13 +440,13 @@ textarea{background:var(--sur2);border:1px solid var(--brd);border-radius:7px;pa
   <button class="sbb" id="n-rep" onclick="go('rep')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Stats</span></button>
   <button class="sbb" id="n-staff" onclick="go('staff')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Staff</span></button>
   <div class="sbot">
-    <button class="sbb" onclick="toast('Settings coming soon')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Setup</span></button>
+    <button class="sbb" onclick="openSettings()" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Setup</span></button>
   </div>
 </div>
 <div class="main">
   <div class="tb">
     <div style="display:flex;align-items:center;gap:7px">
-      <svg width="16" height="16" viewBox="0 0 44 44" fill="none"><line x1="22" y1="2" x2="22" y2="7" stroke="#f5a623" stroke-width="2" stroke-linecap="round"/><line x1="30.5" y1="4.2" x2="28" y2="8.5" stroke="#f5a623" stroke-width="2" stroke-linecap="round"/><line x1="13.5" y1="4.2" x2="16" y2="8.5" stroke="#f5a623" stroke-width="2" stroke-linecap="round"/><path d="M22 10 C14 10 8 16 8 23 C8 28 11 32 15 34 L15 36 C15 37.1 15.9 38 17 38 L27 38 C28.1 38 29 37.1 29 36 L29 34 C33 32 36 28 36 23 C36 16 30 10 22 10 Z" fill="#f5a623"/><circle cx="22" cy="23" r="7" fill="white" opacity=".9"/><circle cx="22" cy="25" r="2.8" fill="#f5a623"/></svg>
+      <img src="icons/favicon.svg" width="20" height="20" alt="" style="border-radius:5px">
       <span style="font-size:15px;font-weight:700;color:var(--tx1);letter-spacing:-.5px">Bright</span>
       <div style="width:1px;height:14px;background:var(--brd)"></div>
       <span id="tbtl" style="font-size:12px;color:var(--tx3)">Dashboard</span>
@@ -519,6 +537,20 @@ textarea{background:var(--sur2);border:1px solid var(--brd);border-radius:7px;pa
   </div>
 </div>
 
+<!-- SETTINGS MODAL -->
+<div class="modal-bg" id="settings-modal">
+  <div class="modal">
+    <h2>Settings</h2>
+    <div class="form-row"><label>Manager PIN</label>
+      <div style="display:flex;gap:8px"><input type="password" id="set-newpin" inputmode="numeric" maxlength="4" placeholder="New 4-digit PIN" autocomplete="off"><button class="btn pr" onclick="savePin()">Change PIN</button></div>
+      <div id="set-pin-msg" style="font-size:11px;color:var(--r);margin-top:4px;min-height:14px"></div>
+      <div style="font-size:11px;color:var(--tx3);margin-top:2px">Stored on this device. Default is 1234 — change it before real use.</div></div>
+    <div class="form-row"><label>Data</label>
+      <div id="set-save-status" style="font-size:12px;color:var(--tx2);margin-bottom:8px"></div>
+      <button class="btn" onclick="resetDemo()">Reset to demo data…</button></div>
+    <div class="modal-actions"><button class="btn pr" onclick="closeModal()">Done</button></div>
+  </div>
+</div>
 <!-- PIN MODAL -->
 <div class="pin-modal" id="pin-modal">
   <div class="pin-box">
@@ -651,7 +683,7 @@ let tableOrders={},tableSeating={},orders_bar={};
 let aT='T2',aC='All',vw='dash',selGuest=GUESTS[0];
 let tableTimers={},tableWaiters={},currentWaiter='Ahmed';
 let pinCallback=null,pinValue='',activeDiscount=null,splitMode='full';
-const MANAGER_PIN='1234';
+let MANAGER_PIN=(function(){try{var p=localStorage.getItem('bright_pin');return /^\d{4}$/.test(p||'')?p:'1234';}catch(e){return '1234';}})();
 let pendingCheckinRoom=null,mpOpenCourse=null,mpCat='Starters';
 let ticketCounter=85,payingTable=null,eightySixBoardOpen=false;
 
@@ -1153,6 +1185,59 @@ go('dash');
 tick();setInterval(tick,30000);
 setInterval(()=>{kdsTickets.forEach(t=>{if(t.started)t.mins++;});Object.keys(tableTimers).forEach(t=>{if(TABLES.find(x=>x.id===t)?.st==='occupied')tableTimers[t]=(tableTimers[t]||0)+1;});},60000);
 document.addEventListener('click',e=>{if(!e.target.closest('.cover-card')&&!e.target.closest('.gsearch-results')){document.querySelectorAll('.gsearch-results').forEach(el=>el.classList.remove('open'));}});
+</script>
+<script>
+/* ═════════ Bright POS — autosave, settings, offline ═════════ */
+(function(){
+  var KEY='bright_pos_state_v1',VER=1,lastBody='',storageOK=true,lastSaved=null;
+  try{localStorage.setItem('__bp','1');localStorage.removeItem('__bp');}catch(e){storageOK=false;}
+  function snapshot(){return {v:VER,tableOrders:tableOrders,tableSeating:tableSeating,orders_bar:orders_bar,kdsTickets:kdsTickets,tableTimers:tableTimers,tableWaiters:tableWaiters,ticketCounter:ticketCounter,currentWaiter:currentWaiter,aT:aT,tables:TABLES.map(function(t){return {id:t.id,st:t.st};}),rooms:ROOMS,guests:GUESTS,reservations:RESERVATIONS,avail:ALL_ITEMS.map(function(i){return [i.id,i.available,!!i.eightySixed];})};}
+  function save(force){
+    if(!storageOK||window.__brightResetting)return;
+    try{var body=JSON.stringify(snapshot());if(body===lastBody&&!force)return;lastBody=body;lastSaved=Date.now();localStorage.setItem(KEY,JSON.stringify({savedAt:lastSaved,data:body}));}catch(e){}
+  }
+  function restore(){
+    if(!storageOK)return false;
+    try{
+      var raw=localStorage.getItem(KEY);if(!raw)return false;
+      var rec=JSON.parse(raw),s=JSON.parse(rec.data);
+      if(!s||s.v!==VER||typeof s.tableOrders!=='object'||typeof s.tableSeating!=='object'||!s.orders_bar||!Array.isArray(s.kdsTickets)||!Array.isArray(s.rooms)||!Array.isArray(s.guests)||!Array.isArray(s.reservations))return false;
+      var gap=Math.max(0,Math.min(720,Math.floor((Date.now()-rec.savedAt)/60000)));
+      tableOrders=s.tableOrders;tableSeating=s.tableSeating;orders_bar=s.orders_bar;kdsTickets=s.kdsTickets;
+      tableTimers=s.tableTimers||{};tableWaiters=s.tableWaiters||{};
+      ticketCounter=s.ticketCounter||ticketCounter;currentWaiter=s.currentWaiter||currentWaiter;if(s.aT)aT=s.aT;
+      (s.tables||[]).forEach(function(x){var t=TABLES.find(function(q){return q.id===x.id;});if(t)t.st=x.st;});
+      ROOMS.splice.apply(ROOMS,[0,ROOMS.length].concat(s.rooms));
+      GUESTS.splice.apply(GUESTS,[0,GUESTS.length].concat(s.guests));
+      RESERVATIONS.splice.apply(RESERVATIONS,[0,RESERVATIONS.length].concat(s.reservations));
+      selGuest=GUESTS[0];
+      (s.avail||[]).forEach(function(a){var it=ALL_ITEMS.find(function(q){return q.id===a[0];});if(it){it.available=a[1];if(a[2])it.eightySixed=true;else delete it.eightySixed;}});
+      if(gap){TABLES.forEach(function(t){if(t.st==='occupied'&&tableTimers[t.id]!=null)tableTimers[t.id]+=gap;});kdsTickets.forEach(function(t){if(t.started)t.mins=(t.mins||0)+gap;});}
+      lastBody=JSON.stringify(snapshot());lastSaved=rec.savedAt;return true;
+    }catch(e){return false;}
+  }
+  window.openSettings=function(){
+    $('set-pin-msg').textContent='';$('set-newpin').value='';
+    $('set-save-status').textContent=storageOK?('Autosave is on'+(lastSaved?' · last saved '+new Date(lastSaved).toLocaleTimeString('en-AE',{hour:'2-digit',minute:'2-digit'}):'')):'Autosave unavailable (private browsing or storage blocked) — data will be lost on refresh';
+    $('settings-modal').classList.add('open');
+  };
+  window.savePin=function(){
+    var np=$('set-newpin').value.trim();
+    if(!/^\d{4}$/.test(np)){$('set-pin-msg').textContent='PIN must be exactly 4 digits';return;}
+    openPin('Change Manager PIN','Enter the current PIN to confirm',function(){MANAGER_PIN=np;try{localStorage.setItem('bright_pin',np);}catch(e){}$('set-newpin').value='';$('set-pin-msg').textContent='';toast('✅ Manager PIN changed');});
+  };
+  window.resetDemo=function(){
+    openPin('Reset demo data','Manager PIN required',function(){
+      if(!confirm('Reset ALL orders, tables, rooms and reservations back to the demo data? This cannot be undone.'))return;
+      window.__brightResetting=true;try{localStorage.removeItem(KEY);}catch(e){}location.reload();
+    });
+  };
+  if(restore()){go('dash');toast('↻ Restored your last session','#15803d');}
+  setInterval(save,3000);
+  window.addEventListener('pagehide',function(){save(true);});
+  document.addEventListener('visibilitychange',function(){if(document.hidden)save(true);});
+  if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
+})();
 </script>
 </body>
 </html>
